@@ -13,9 +13,13 @@ class GradebooksController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function getAll(Request $request)
     {
-
+        // $per_page = $request->query('per_page', 1000);
+        // $gradebooks = Gradebook::paginate($per_page);
+      
+        $gradebooks = Gradebook::all();
+        return $gradebooks;
     }
 
     /**
@@ -26,7 +30,8 @@ class GradebooksController extends Controller
      */
     public function store(CreateGradebookRequest $request)
     {
-
+        $gradebook = Gradebook::create($request->validated());
+        return response()->json($gradebook);
     }
 
     /**
@@ -37,7 +42,8 @@ class GradebooksController extends Controller
      */
     public function show(string $id)
     {
-
+        $gradebook = Gradebook::findOrFail($id);
+        return response()->json($gradebook);
     }
 
     /**
@@ -49,7 +55,9 @@ class GradebooksController extends Controller
      */
     public function update(Request $request, $id)
     {
-
+        $gradebook = Gradebook::findOrFail($id);
+        $gradebook->update($request->validated());
+        return response()->json($gradebook);
     }
 
     /**
@@ -60,6 +68,7 @@ class GradebooksController extends Controller
      */
     public function delete($id)
     {
-
+        $gradebook = Gradebook::findOrFail($id);
+        $gradebook->delete();
     }
 }

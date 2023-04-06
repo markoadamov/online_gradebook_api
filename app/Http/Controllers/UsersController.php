@@ -12,9 +12,13 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function getAll(Request $request)
     {
+        // $per_page = $request->query('per_page', 1000);
+        // $users = User::paginate($per_page);
 
+        $users = User::all();
+        return $users;
     }
 
     /**
@@ -36,7 +40,8 @@ class UsersController extends Controller
      */
     public function show(string $id)
     {
-
+        $user = User::findOrFail($id);
+        return response()->json($user);
     }
 
     /**

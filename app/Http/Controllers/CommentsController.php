@@ -15,9 +15,13 @@ class CommentsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function getAll(Request $request)
     {
+        // $per_page = $request->query('per_page', 1000);
+        // $comments = Comment::paginate($per_page);
 
+        $comments = Comment::all();
+        return $comments;
     }
 
     /**
@@ -28,7 +32,8 @@ class CommentsController extends Controller
      */
     public function store(Request $request)
     {
-
+        $comment = Comment::create($request->validated());
+        return response()->json($comment);
     }
 
     /**
@@ -62,6 +67,7 @@ class CommentsController extends Controller
      */
     public function delete($id)
     {
-
+        $comment = Comment::findOrFail($id);
+        $comment->delete();
     }
 }

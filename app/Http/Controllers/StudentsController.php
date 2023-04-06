@@ -6,16 +6,20 @@ use App\Http\Requests\CreateStudentRequest;
 use App\Models\Student;
 use Illuminate\Http\Request;
 
-class StudentController extends Controller
+class StudentsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function getAll(Request $request)
     {
+        // $per_page = $request->query('per_page', 1000);
+        // $students = Student::paginate($per_page);
 
+        $students = Student::all();
+        return $students;
     }
 
     /**
@@ -26,7 +30,8 @@ class StudentController extends Controller
      */
     public function store(CreateStudentRequest $request)
     {
-
+        $student = Student::create($request->validated());
+        return response()->json($student);
     }
 
     /**

@@ -28,19 +28,19 @@ Route::post('/logout', [AuthController::class, 'logout']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::get('/active-user', [AuthController::class, 'getActiveUser']);
 
-Route::get('/teachers', [UsersController::class, 'index']);
+Route::get('/teachers', [UsersController::class, 'getAll']);
 Route::get('/teachers/{id}', [UsersController::class, 'show']);
 
-Route::get('/gradebooks', [GradebooksController::class, 'index']);
+Route::get('/gradebooks', [GradebooksController::class, 'getAll']);
 Route::get('/gradebooks/{id}', [GradebooksController::class, 'show']);
 Route::post('/gradebooks', [GradebooksController::class, 'store']);
 Route::put('/gradebooks/{id}', [GradebooksController::class, 'update']);
 Route::delete('/gradebooks/{id}', [GradebooksController::class, 'delete']);
 
-Route::get('/students', [StudentsController::class, 'index']);
+Route::get('/students', [StudentsController::class, 'getAll']);
 Route::post('/students', [StudentsController::class, 'store']);
 
-Route::get('/comments', [CommentsController::class, 'index']);
+Route::get('/comments', [CommentsController::class, 'getAll']);
 Route::post('/comments', [CommentsController::class, 'store']);
 Route::delete('/comments/{id}', [CommentsController::class, 'delete']);
 
