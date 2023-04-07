@@ -14,6 +14,14 @@ class Gradebook extends Model
         'user_id',
     ];
 
+    public static function scopeSearchByTerm($query, $filterTerm)
+    {
+        if (!$filterTerm) {
+            return $query;
+        }
+        return $query->where('name', 'like', "%$filterTerm%");
+    }
+
     public function comments()
     {
         return $this->hasMany(Comment::class);
@@ -27,5 +35,13 @@ class Gradebook extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getUserNameAttribute()
+    {
+        $firstName = $this->user->first_name;
+        $lastName = $this->user->last_name;
+
+        return $firstName . ' ' . $lastName;
     }
 }

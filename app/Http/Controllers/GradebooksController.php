@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateGradebookRequest;
 use App\Models\Gradebook;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class GradebooksController extends Controller
 {
@@ -15,10 +16,19 @@ class GradebooksController extends Controller
      */
     public function getAll(Request $request)
     {
-        // $per_page = $request->query('per_page', 1000);
-        // $gradebooks = Gradebook::paginate($per_page);
-      
-        $gradebooks = Gradebook::all();
+        $per_page = $request->query('per_page', 10);
+        $filterTerm = $request->query('filter', '');
+
+        $gradebooks = Gradebook::searchByTerm($filterTerm)->paginate($per_page);
+
+        $gradebooks->each(function ($gradebook) {
+            if($gradebook->user_id){
+                $gradebook->user_name = $gradebook->user->first_name . ' ' . $gradebook->user->last_name;
+            }
+        });
+        
+        $gradebooks->makeHidden('user'); // Ovo sam dodao jer mi je bez ovoga u svaki gradebook objekat dodavao property user sa svim vrednostima koje karakterisu user-a (tj. profesora), a ne zelim to da saljem na front.
+
         return $gradebooks;
     }
 

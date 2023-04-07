@@ -15,6 +15,6 @@ class GradebooksTableSeeder extends Seeder
      */
     public static function run()
     {
-        Gradebook::factory()->count(5)->create();
+        Gradebook::factory()->count(31)->create();
     }
 }

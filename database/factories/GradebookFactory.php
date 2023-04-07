@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\DB;
+
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Gradebook>
  */
@@ -17,12 +18,18 @@ class GradebookFactory extends Factory
      */
     public function definition()
     {
-        $userIds = DB::table('users')->pluck('id')->toArray();
+        $userIds = DB::table('users')->orderBy('id')->pluck('id')->toArray();
         self::$userIndex++;
 
-        return [
-            'name' => $this->faker->name(),
-            'user_id' => $userIds[self::$userIndex],
-        ];
+        if (self::$userIndex !== 1 && self::$userIndex<count($userIds)) { //dodeljujem postojece profesore, drugi gradebook preskacem i sve ostale ako nema vise profesora
+            return [
+                'name' => $this->faker->name(),
+                'user_id' => $userIds[self::$userIndex], 
+            ];
+        } else {
+            return [
+                'name' => $this->faker->name(),
+            ];
+        }
     }
 }
