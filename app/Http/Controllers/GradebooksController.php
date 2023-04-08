@@ -53,6 +53,13 @@ class GradebooksController extends Controller
     public function show(string $id)
     {
         $gradebook = Gradebook::findOrFail($id);
+
+            if($gradebook->user_id){
+                $gradebook->user_name = $gradebook->user->first_name . ' ' . $gradebook->user->last_name;
+            }
+        
+        $gradebook->makeHidden('user');
+
         return response()->json($gradebook);
     }
 

@@ -27,6 +27,14 @@ class User extends Authenticatable implements JWTSubject
         'accepted_terms'
     ];
 
+    public static function scopeSearchByName($query, $filterTerm)
+    {
+        if (!$filterTerm) {
+            return $query;
+        }
+        return $query->whereRaw("LOWER(first_name) = ?", [strtolower($filterTerm)]);
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -74,6 +82,6 @@ class User extends Authenticatable implements JWTSubject
     }
 
     public function gradebook() {
-        return $this->belongsTo(Gradebook::class);
+        return $this->hasOne(Gradebook::class);
     } 
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Gradebook;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -14,10 +15,19 @@ class UsersController extends Controller
      */
     public function getAll(Request $request)
     {
-        // $per_page = $request->query('per_page', 1000);
-        // $users = User::paginate($per_page);
+        $per_page = $request->query('per_page', 1000);
+        $filterTerm = $request->query('filter', '');
 
-        $users = User::all();
+        $users = User::searchByName($filterTerm)->paginate($per_page);
+
+        $users->each(function ($user) {
+            if ($user->gradebook) {
+                $user->gradebook_name = $user->gradebook->name;
+            }
+        });
+        
+        //$users->makeHidden('user');
+
         return $users;
     }
 
