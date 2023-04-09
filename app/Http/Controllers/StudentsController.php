@@ -18,7 +18,10 @@ class StudentsController extends Controller
         // $per_page = $request->query('per_page', 1000);
         // $students = Student::paginate($per_page);
 
-        $students = Student::all();
+        $gradebook_id = $request->query('filter', '');
+
+        $students = Student::where('gradebook_id', $gradebook_id)->get();
+        
         return $students;
     }
 

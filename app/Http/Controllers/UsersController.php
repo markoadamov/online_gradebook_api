@@ -15,10 +15,11 @@ class UsersController extends Controller
      */
     public function getAll(Request $request)
     {
-        $per_page = $request->query('per_page', 1000);
+        $per_page = $request->query('per_page', 1000000);
         $filterTerm = $request->query('filter', '');
+        $only_free = $request->query('only_free', 0);
 
-        $users = User::searchByName($filterTerm)->paginate($per_page);
+        $users = User::searchByName($filterTerm)->searchNotClassTeachers(($only_free))->paginate($per_page);
 
         $users->each(function ($user) {
             if ($user->gradebook) {
@@ -51,6 +52,12 @@ class UsersController extends Controller
     public function show(string $id)
     {
         $user = User::findOrFail($id);
+
+        if($user->gradebook_id){
+            $user->gradebook_name = $user->gradebook->name;
+            $user->students_count = count($user->gradebook->students)?count($user->gradebook->students):0;
+        }
+
         return response()->json($user);
     }
 

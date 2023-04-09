@@ -41,6 +41,12 @@ class GradebooksController extends Controller
     public function store(CreateGradebookRequest $request)
     {
         $gradebook = Gradebook::create($request->validated());
+        if ($request->user_id) {
+            $gradebook->user_id = $request->user_id;
+            $gradebook->user->gradebook_id = $gradebook->id;
+            $gradebook->user->save();
+        }
+        $gradebook->save();
         return response()->json($gradebook);
     }
 
@@ -57,7 +63,12 @@ class GradebooksController extends Controller
             if($gradebook->user_id){
                 $gradebook->user_name = $gradebook->user->first_name . ' ' . $gradebook->user->last_name;
             }
+
+            if($gradebook->students){
+                $gradebook->class_students = $gradebook->students;
+            }
         
+        $gradebook->makeHidden('students');
         $gradebook->makeHidden('user');
 
         return response()->json($gradebook);

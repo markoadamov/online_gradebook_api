@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
  */
 class StudentFactory extends Factory
 {
-    private static $imageUrlNumber = 0;
+    private static $imageUrlNumber = 200;
     private static $gradebookIndex = -1;
     /**
      * Define the model's default state.
@@ -31,7 +31,8 @@ class StudentFactory extends Factory
             'first_name' => $this->faker->firstName(),
             'last_name' => $this->faker->lastName(),
             'gradebook_id' => $gradebookIds[self::$gradebookIndex],
-            'image_url' => "https://randomuser.me/api/portraits/men/" . self::$imageUrlNumber . ".jpg",
+            //'image_url' => "https://randomuser.me/api/portraits/women/" . self::$imageUrlNumber . ".jpg",
+            'image_url' => "https://picsum.photos/".self::$imageUrlNumber,
         ];
     }
 }

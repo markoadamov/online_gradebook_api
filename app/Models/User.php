@@ -34,7 +34,14 @@ class User extends Authenticatable implements JWTSubject
         }
         return $query->whereRaw("LOWER(first_name) = ?", [strtolower($filterTerm)]);
     }
-
+    
+    public static function scopeSearchNotClassTeachers($query, $only_free)
+    {
+        if ($only_free) {
+            return $query->whereNull('gradebook_id');
+        }
+        return $query;
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

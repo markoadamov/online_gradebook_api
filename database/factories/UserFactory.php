@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
  */
 class UserFactory extends Factory
 {
-    private static $imageUrlNumber = 0;
+    private static $imageUrlNumber = 200;
     /**
      * Define the model's default state.
      *
@@ -23,7 +23,8 @@ class UserFactory extends Factory
         return [
             'first_name' => $this->faker->firstNameMale(),
             'last_name' => $this->faker->lastName(),
-            'image_url' => "https://randomuser.me/api/portraits/men/" . self::$imageUrlNumber . ".jpg",
+            //'image_url' => "https://randomuser.me/api/portraits/men/" . self::$imageUrlNumber . ".jpg",
+            'image_url' => "https://picsum.photos/".self::$imageUrlNumber,
             'accepted_terms' => fake()->boolean(100),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
