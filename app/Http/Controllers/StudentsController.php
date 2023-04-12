@@ -18,7 +18,7 @@ class StudentsController extends Controller
         // $per_page = $request->query('per_page', 1000);
         // $students = Student::paginate($per_page);
 
-        $gradebook_id = $request->query('filter', '');
+        $gradebook_id = $request->query('gradebook_id', '');
 
         $students = Student::where('gradebook_id', $gradebook_id)->get();
         
@@ -34,6 +34,9 @@ class StudentsController extends Controller
     public function store(CreateStudentRequest $request)
     {
         $student = Student::create($request->validated());
+        $student->gradebook_id = $request->gradebook_id;
+        $student->save();
+        
         return response()->json($student);
     }
 
@@ -66,8 +69,9 @@ class StudentsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete($id)
     {
-        //
+        $student = Student::findOrFail($id);
+        $student->delete();
     }
 }

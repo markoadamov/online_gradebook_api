@@ -39,6 +39,7 @@ Route::delete('/gradebooks/{id}', [GradebooksController::class, 'delete']);
 
 Route::get('/students', [StudentsController::class, 'getAll']);
 Route::post('/students', [StudentsController::class, 'store']);
+Route::delete('/students/{id}', [StudentsController::class, 'delete']);
 
 Route::get('/comments', [CommentsController::class, 'getAll']);
 Route::post('/comments', [CommentsController::class, 'store']);

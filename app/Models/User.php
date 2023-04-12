@@ -90,5 +90,6 @@ class User extends Authenticatable implements JWTSubject
 
     public function gradebook() {
         return $this->hasOne(Gradebook::class);
+        //return $this->belongsTo(Gradebook::class);
     } 
 }

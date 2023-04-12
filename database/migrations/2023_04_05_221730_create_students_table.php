@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->id();
             $table->foreignId('gradebook_id')->nullable();
+            //$table->foreign('gradebook_id')->references('id')->on('gradebooks')->onDelete('cascade');
             $table->string('first_name');
             $table->string('last_name');
             $table->text('image_url')->default(null);

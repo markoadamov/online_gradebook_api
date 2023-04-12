@@ -25,6 +25,8 @@ class CreateCommentRequest extends FormRequest
     {
         return [
             'body' => 'required|string|max:1000',
+            'user_id' => 'integer',
+            'gradebook_id' => 'integer',
         ];
     }
 }

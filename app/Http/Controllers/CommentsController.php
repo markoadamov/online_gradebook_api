@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateCommentRequest;
 use App\Models\Comment;
-use App\Models\Gradebook;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class CommentsController extends Controller
 {
@@ -17,10 +15,18 @@ class CommentsController extends Controller
      */
     public function getAll(Request $request)
     {
-        // $per_page = $request->query('per_page', 1000);
-        // $comments = Comment::paginate($per_page);
+        //$comments = Comment::all();
+        $gradebook_id = $request->gradebook_id;
+        $comments = Comment::where('gradebook_id', $gradebook_id)->get();
 
-        $comments = Comment::all();
+        $comments->each(function ($comment) {
+            if($comment->user_id){
+                $comment->user_name =  $comment->user->first_name." ".$comment->user->last_name;
+            }
+        });
+
+        $comments->makeHidden('user');
+
         return $comments;
     }
 
@@ -30,9 +36,15 @@ class CommentsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateCommentRequest $request)
     {
         $comment = Comment::create($request->validated());
+        $comment->user_id = $request->user_id;
+        $comment->gradebook_id = $request->gradebook_id;
+        $comment->save();
+        
+        $comment->user_name =  $comment->user->first_name." ".$comment->user->last_name;
+        
         return response()->json($comment);
     }
 

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('gradebook_id')->nullable();
             $table->foreignId('user_id')->nullable();
+            $table->text('body')->nullable();
             $table->timestamps();
         });
     }

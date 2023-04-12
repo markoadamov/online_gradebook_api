@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateGradebookRequest;
 use App\Models\Gradebook;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -67,6 +68,10 @@ class GradebooksController extends Controller
             if($gradebook->students){
                 $gradebook->class_students = $gradebook->students;
             }
+            else
+            {
+                $gradebook->class_students = [];
+            }
         
         $gradebook->makeHidden('students');
         $gradebook->makeHidden('user');
@@ -81,10 +86,29 @@ class GradebooksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CreateGradebookRequest $request, $id)
     {
+        $validatedData = $request->validated();
+
         $gradebook = Gradebook::findOrFail($id);
-        $gradebook->update($request->validated());
+        $user = User::findOrFail($request->user_id);
+        
+        if(($gradebook->user->id !== $request->user_id) && !empty($request->validated()))
+        {
+            $gradebook->user->gradebook_id = null;
+            $gradebook->user->save();
+            $gradebook->user_id = $request->user_id;
+            $gradebook->save();
+            
+            $user->gradebook_id = $gradebook->id;
+            $user->save();
+        }
+        else
+        {
+            $gradebook->update($validatedData);
+        }
+        
+        
         return response()->json($gradebook);
     }
 
@@ -97,6 +121,8 @@ class GradebooksController extends Controller
     public function delete($id)
     {
         $gradebook = Gradebook::findOrFail($id);
+        $gradebook->user->gradebook_id = null;
+        $gradebook->user->save();
         $gradebook->delete();
     }
 }

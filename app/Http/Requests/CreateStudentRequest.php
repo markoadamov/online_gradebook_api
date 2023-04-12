@@ -27,7 +27,6 @@ class CreateStudentRequest extends FormRequest
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'image_url' => 'required|url',
-            // 'password_confirmation' => 'required|same_as:password'
         ];
     }
 }
